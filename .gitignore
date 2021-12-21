@@ -1,0 +1,11 @@
+# IDE file
+/.idea
+
+# CMake file
+/cmake-build-debug
+/cmake-build-release
+
+# Server
+/PuTTY
+
+/bin

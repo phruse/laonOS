@@ -1,0 +1,35 @@
+// SPDX-License-Identifier: MIT
+
+#pragma once
+
+#include <utilities.h>
+#include <stddef.h>
+
+/**
+ * clear console screen
+ */
+void clear_screen(void);
+
+/**
+ * vga text mode putchar for debugging.
+ *
+ * @param character character to print.
+ */
+void putchar(int character);
+
+/**
+ * vga text mode puts for debugging.
+ *
+ * @param text text to print.
+ * @return length of printed string
+ */
+size_t puts(const char *text);
+
+/**
+ * print to console according to the format string.
+ *
+ * @param format format string
+ * @param ... additional format string
+ * @return length of printed string
+ */
+size_t printf(const char *format, ...);
