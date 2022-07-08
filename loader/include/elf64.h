@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 
 #pragma once
+#ifndef LAONOS_LOADER_INCLUDE_ELF64_H
+#define LAONOS_LOADER_INCLUDE_ELF64_H
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -17,95 +19,97 @@
 #define ELF_SHT_DYNSYM 0xb
 
 enum {
-    R_x86_64_NONE = 0,
+  R_x86_64_NONE = 0,
 
-    R_x86_64_64 = 1,
-    R_X86_64_RELATIVE = 8
+  R_x86_64_64 = 1,
+  R_X86_64_RELATIVE = 8
 };
 
 #pragma pack(push, 1)
 
 typedef struct {
-    uint32_t magic;
-    uint8_t class;
-    uint8_t endianness;
-    uint8_t version;
-    uint8_t abi;
-    uint8_t abi_version;
-    uint32_t : 32;// not used
-    uint16_t : 16;
-    uint8_t : 8;
+  uint32_t magic;
+  uint8_t class;
+  uint8_t endianness;
+  uint8_t version;
+  uint8_t abi;
+  uint8_t abi_version;
+  uint32_t : 32;// not used
+  uint16_t : 16;
+  uint8_t : 8;
 } elf64_identify_t;
 
 typedef struct {
-    elf64_identify_t identify;
-    uint16_t type;
-    uint16_t isa;
-    uint32_t version;
-    uint64_t entry;
-    uint64_t program_entry;
-    uint64_t section_entry;
-    uint32_t flag;
-    uint16_t size;
-    uint16_t program_size;
-    uint16_t program_number;
-    uint16_t section_size;
-    uint16_t section_number;
-    uint16_t section_index;
+  elf64_identify_t identify;
+  uint16_t type;
+  uint16_t isa;
+  uint32_t version;
+  uint64_t entry;
+  uint64_t program_entry;
+  uint64_t section_entry;
+  uint32_t flag;
+  uint16_t size;
+  uint16_t program_size;
+  uint16_t program_number;
+  uint16_t section_size;
+  uint16_t section_number;
+  uint16_t section_index;
 } elf64_file_t;
 
 typedef struct {
-    uint32_t name;
-    uint32_t type;
-    uint64_t flags;
-    uint64_t address;
-    uint64_t offset;
-    uint64_t size;
-    uint32_t link;
-    uint32_t info;
-    uint64_t align;
-    uint64_t entsize;
+  uint32_t name;
+  uint32_t type;
+  uint64_t flags;
+  uint64_t address;
+  uint64_t offset;
+  uint64_t size;
+  uint32_t link;
+  uint32_t info;
+  uint64_t align;
+  uint64_t entsize;
 } elf64_section_t;
 
 typedef struct {
-    uint64_t offset;
-    uint32_t type;
-    uint32_t symbol;
-    int64_t addend;
+  uint64_t offset;
+  uint32_t type;
+  uint32_t symbol;
+  int64_t addend;
 } elf64_rela_t;
 
 typedef struct {
-    uint32_t name;
-    uint8_t info;
-    uint8_t other;
-    uint16_t shndx;
-    uint64_t value;
-    uint64_t size;
+  uint32_t name;
+  uint8_t info;
+  uint8_t other;
+  uint16_t shndx;
+  uint64_t value;
+  uint64_t size;
 } elf64_sym_t;
 
 #pragma pack(pop)
 
 typedef struct {
-    elf64_file_t *file_ptr;
-    uint32_t file_end;
-    uint32_t relocate;
-    uint64_t entry;
+  uintptr_t file_start; // module start
+  uintptr_t file_end;   // module end
+  uint64_t entry;     // entry address
 } elf64_t;
 
 /**
  * init the elf64 executable file
  *
- * @param file_ptr file memory address
  * @param file elf64 file
+ * @param physical_location
+ *  the physical memory where the ELF file will be located.(optional)
  * @return
  */
-bool elf64_init_executable(uint32_t file_ptr, uint32_t file_end, elf64_t *file);
+bool elf64_init_executable(elf64_t *file, uintptr_t physical_location);
 
 /**
  * relocate the relocatable elf64 executable file
  *
- * @param header elf64 file header
+ * @param file elf64 file
  * @param location address to relocate
  * @return
  */
 bool elf64_relocate_executable(const elf64_t *file, uint64_t location);
+
+#endif //LAONOS_LOADER_INCLUDE_ELF64_H

@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 
 #pragma once
+#ifndef LAONOS_LOADER_STANDARD_INCLUDE_STRING_H
+#define LAONOS_LOADER_STANDARD_INCLUDE_STRING_H
 
 #include <stdbool.h>
 #include <stddef.h>
@@ -8,11 +10,11 @@
 /**
  * compare two strings
  *
- * @param string1 string to compared
- * @param string2 string to compared
+ * @param first_str string to compared
+ * @param second_str string to compared
  * @return if both strings are equal return true and otherwise return false
  */
-int strcmp(const char *string1, const char *string2);
+int strcmp(const char *first_str, const char *second_str);
 
 /**
  * copy string
@@ -39,13 +41,16 @@ size_t strlen(const char *string);
  * @param size number of bytes
  * @return input prt
  */
-void *memset(void *ptr, int number, size_t size);
+void *memset(uintptr_t *ptr, int number, size_t size);
 
 /**
+ * copy memory
  *
- * @param dest
- * @param src
- * @param size
- * @return
+ * @param dest destination address
+ * @param src source address
+ * @param size copy size
+ * @return input destination
  */
-void *memcpy(void *dest, const void *src, size_t size);
+void *memcpy(uintptr_t *dest, const uintptr_t *src, size_t size);
+
+#endif //LAONOS_LOADER_STANDARD_INCLUDE_STRING_H

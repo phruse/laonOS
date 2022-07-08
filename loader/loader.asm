@@ -11,34 +11,34 @@ TBALE equ 1048576
 align 8
 section .multiboot2 ;multiboot2 header
 multiboot2_start:
-    ;magic
-    dd 0xe85250d6
-    ;architecture (32-bit mode of i386)
-    dd 0
-    ;header_length
-    dd multiboot2_end - multiboot2_start
-    ;checksum
-    dd 0x100000000 - (0xe85250d6 + 0 + (multiboot2_end - multiboot2_start))
-    dw 0
-    dw 0
-    dd 8
+  ;magic
+  dd 0xe85250d6
+  ;architecture (32-bit mode of i386)
+  dd 0
+  ;header_length
+  dd multiboot2_end - multiboot2_start
+  ;checksum
+  dd 0x100000000 - (0xe85250d6 + 0 + (multiboot2_end - multiboot2_start))
+  dw 0
+  dw 0
+  dd 8
 multiboot2_end:
 
 section .text
 
 main:
-    cli                     ;interrupt blocking
+  cli               ;interrupt blocking
 
-    mov esp, os_stack       ;set stack pointer register
-    mov ebp, esp            ;set base pointer register (legacy)
+  mov esp, os_stack ;set stack pointer register
+  mov ebp, esp      ;set base pointer register (legacy)
 
-    push ebx                ;passing boot information as loaderMain argument
-    push eax                ;passing magic value as loaderMain argument
-    call loader_main
+  push ebx          ;passing boot information as loader_main argument
+  push eax          ;passing magic value as loader_main argument
+  call loader_main
 
-    hlt	                    ;make idle state to the processor.
+  hlt	            ;make idle state to the processor.
 
 ;allocatable(alloc), writable(write) don't stored this section(nobits)
 section .loader_stack nobits alloc noexec write align=16
-    resb OS_STACK_SIZE		;create stack
+  resb OS_STACK_SIZE		;create stack
 os_stack:

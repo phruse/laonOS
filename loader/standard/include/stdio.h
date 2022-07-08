@@ -1,6 +1,8 @@
 // SPDX-License-Identifier: MIT
 
 #pragma once
+#ifndef LAONOS_LOADER_STANDARD_INCLUDE_STDIO_H
+#define LAONOS_LOADER_STANDARD_INCLUDE_STDIO_H
 
 #include <utilities.h>
 #include <stddef.h>
@@ -33,3 +35,5 @@ size_t puts(const char *text);
  * @return length of printed string
  */
 size_t printf(const char *format, ...);
+
+#endif //LAONOS_LOADER_STANDARD_INCLUDE_STDIO_H
