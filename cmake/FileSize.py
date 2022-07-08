@@ -20,5 +20,5 @@ with open(sys.argv[2], 'r') as defineFile:
         else:
             fileData += line
 
-with open(sys.argv[2], 'w') as file:
-    file.write(fileData)
+with open(sys.argv[2], 'w') as header_file:
+    header_file.write(fileData)
