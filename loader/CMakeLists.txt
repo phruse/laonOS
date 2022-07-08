@@ -15,8 +15,8 @@ set(LOADER_SRC
         loader.asm
         loader.c
         source/init.c
-        source/init.asm
         source/elf64.c
+        source/init.asm
         ${LOADER_STANDARD_SRC}
 )
 set(LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/link.ld)
@@ -35,9 +35,12 @@ target_compile_options(${LOADER_NAME} PUBLIC
         "$<$<COMPILE_LANGUAGE:C>:${LOADER_C_FLAG}>"
 )
 target_link_options(${LOADER_NAME} PUBLIC
-        -T ${LINKER_SCRIPT}      # linker script
-        -m elf_i386              # 32bit build
-        -lclang_rt.builtins-i386 # compiler-rt
+        -T ${LINKER_SCRIPT}             # linker init
+        -m elf_i386                     # 32bit build
+        "SHELL:-z max-page-size=0x1000" # file size optimization
+)
+target_link_options(${LOADER_NAME} PUBLIC
+        -lclang_rt.builtins-i386      # compiler-rt
 )
 target_include_directories(${LOADER_NAME} PUBLIC
         standard/include

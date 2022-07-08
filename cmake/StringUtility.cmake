@@ -15,14 +15,14 @@ function(first_letter_uppercase str out_str)
 
 endfunction()
 
-function(get_output_path target output_path)
+function(get_output_dir target output_dir)
 
-    get_property(path TARGET ${target} PROPERTY RUNTIME_OUTPUT_DIRECTORY)
+    get_property(dir TARGET ${target} PROPERTY RUNTIME_OUTPUT_DIRECTORY)
     get_property(name TARGET ${target} PROPERTY OUTPUT_NAME)
     if (${CMAKE_SYSTEM_NAME} MATCHES "Windows")
-        set(${output_path} "${path}\\${name}" PARENT_SCOPE)
+        set(${output_dir} "${dir}\\${name}" PARENT_SCOPE)
     else()
-        set(${output_path} "${path}/${name}" PARENT_SCOPE)
+        set(${output_dir} "${dir}/${name}" PARENT_SCOPE)
     endif()
 
 endfunction()
