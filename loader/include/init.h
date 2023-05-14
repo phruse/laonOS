@@ -7,15 +7,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "gdt.h"
 #include "elf64.h"
-
-/**
- * GDT initialize
- *
- * @return if successful return true and otherwise return false
- */
-bool gdt_init(void);
 
 /**
  * multiboot2 initialize
@@ -33,11 +25,4 @@ bool multiboot2_init(uintptr_t info_address, elf64_t *kernel_file);
  */
 bool check_bootloader(uint32_t magic_value);
 
-/**
- * setup long mode
- *
- * @return if successful return true and otherwise return false
- */
-bool x86_64_init(elf64_t *kernel_file);
-
-#endif //LAONOS_LOADER_INCLUDE_INIT_H
+#endif // LAONOS_LOADER_INCLUDE_INIT_H

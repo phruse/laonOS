@@ -12,6 +12,6 @@
  * @param magic_value magic value that checks bootloader.
  * @param info_address pointer of multiboot information structure.
  */
-void loader_main(uint32_t magic_value, uintptr_t info_address);
+_Noreturn void loader_main(uint32_t magic_value, uintptr_t info_address);
 
-#endif //LAONOS_LOADER_LOADER_H
+#endif // LAONOS_LOADER_LOADER_H

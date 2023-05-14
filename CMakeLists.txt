@@ -4,6 +4,7 @@ cmake_minimum_required(VERSION 3.20)
 
 set(laonOS_NAME laonOS)
 set(CMAKE_ASM_NASM_OBJECT_FORMAT elf) # NASM elf format build
+set(CMAKE_C_COMPILER_WORKS 1)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
@@ -18,6 +19,8 @@ message("")
 message(NOTICE "Project ${CMAKE_PROJECT_NAME}")
 message(NOTICE "Build Version ${CMAKE_PROJECT_VERSION}")
 message("")
+
+include(Setting) # load setting
 
 include(Find)
 find_build_tools() # tools check
@@ -66,7 +69,7 @@ set(OS_C_FLAGS
         -Wpedantic          # strict ISO C
         -ffreestanding      # freestanding build
         -D_FORTIFY_SOURCE=2 # prevent buffer overflows
-        -mno-red-zone       # avoid interrupt handler problem TODO
+        -mno-red-zone       # avoid interrupt handler problem
 
         $<$<CONFIG:Debug>:-Wno-error=unused-variable>
         $<$<PLATFORM_ID:Darwin>:-Wno-error=unused-command-line-argument>
@@ -141,7 +144,7 @@ if (CMAKE_BUILD_TYPE STREQUAL "Release")
             > "${CMAKE_BINARY_DIR}/extract/sha1.txt" # hash
             COMMAND ${LAON-OS_GRUB_DIR} -o
                 "${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/${CMAKE_PROJECT_NAME}.iso"
-            "${CMAKE_BINARY_DIR}/extract" # TODO replace mkisofs
+            "${CMAKE_BINARY_DIR}/extract"
             COMMAND ${CMAKE_COMMAND} -E remove_directory
                 "${CMAKE_BINARY_DIR}/extract" # clean
     )

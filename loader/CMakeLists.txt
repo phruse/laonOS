@@ -9,49 +9,41 @@ message(STATUS "Include ${LOADER_NAME}")
 
 include(Build)
 
-include(standard/CMakeLists.txt)
+include(src/CMakeLists.txt)
+include(std/src/CMakeLists.txt)
 
-set(LOADER_SRC
+set(LOADER_CODE
         loader.asm
         loader.c
-        source/init.c
-        source/elf64.c
-        source/init.asm
+        ${LOADER_SRC}
         ${LOADER_STANDARD_SRC}
 )
 set(LINKER_SCRIPT ${CMAKE_CURRENT_SOURCE_DIR}/link.ld)
 
-build_binary(${LOADER_NAME} ${TEMP_OUTPUT} "${LOADER_SRC}")
+build_binary(${LOADER_NAME} ${TEMP_OUTPUT} "${LOADER_CODE}")
 set_target_properties(${LOADER_NAME} PROPERTIES
         LINK_DEPENDS ${LINKER_SCRIPT}
 )
 set(LOADER_C_FLAG
-        -target i686-pc-none-elf      # targeting
-        -march=i686                   # generate instructions
-        -Wno-language-extension-token # asm
-        -mcmodel=kernel               # memory restriction, 2G code section
+        -target ${LOADER_PLATFORM}-pc-none-elf # targeting
+        -march=${LOADER_PLATFORM}              # generate instructions
+        -Wno-language-extension-token          # asm
+        -mcmodel=kernel                        # memory restriction, 2G code section
 )
 target_compile_options(${LOADER_NAME} PUBLIC
         "$<$<COMPILE_LANGUAGE:C>:${LOADER_C_FLAG}>"
+        -D${LOADER_PLATFORM}            # platform define
 )
 target_link_options(${LOADER_NAME} PUBLIC
         -T ${LINKER_SCRIPT}             # linker init
-        -m elf_i386                     # 32bit build
+        -m elf_${LOADER_PLATFORM}       # 32bit build
         "SHELL:-z max-page-size=0x1000" # file size optimization
 )
 target_link_options(${LOADER_NAME} PUBLIC
         -lclang_rt.builtins-i386      # compiler-rt
 )
 target_include_directories(${LOADER_NAME} PUBLIC
-        standard/include
+        std/include
         include
         external
-)
-add_custom_command(TARGET ${LOADER_NAME} # defined OS_KERNEL_SIZE
-        PRE_BUILD
-        COMMENT "Preprocessing..."
-        COMMAND python3 ${CMAKE_SOURCE_DIR}/cmake/FileSize.py
-            ${TEMP_OUTPUT}/${KERNEL_NAME}.elf
-            ${CMAKE_SOURCE_DIR}/loader/include/info.h
-        VERBATIM
 )

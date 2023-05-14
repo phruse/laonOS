@@ -7,6 +7,6 @@
 /**
  * kernel c entry point
  */
-void kmain();
+void kmain(void);
 
 #endif //LAONOS_KERNEL_KERNEL_H

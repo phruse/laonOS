@@ -4,19 +4,25 @@
 
 It is an operating system for study.
 
-## Quick Overview
+## 👀 Quick Overview
 
-## Feature
+## 🏆 Feature
+
+* ☑️ Multi-platform support
+
 ### kernel
+
 * ☑️ Exokernel
 * ☑️ Higher half kernel load
 
 ### libOS
+
 * ❌ Coroutines supported by the libOS level
 
 <sup>✅</sup>:completion, <sup>☑️</sup>: in progress, <sup>❌</sup>: planned
 
-## Build Dependencies
+## 🧰 Build Dependencies
+
 * CMake (`cmake` + `ninja` or `make`)
 * LLVM (`clang`, `ld`, `llvm-objcopy-13`)
 * NASM (`nasm`)
@@ -24,7 +30,8 @@ It is an operating system for study.
 
 Read more `cmake/Tools.cmake`
 
-## References
+## 📚 References
+
 This project would not have been possible without the help of these papers.
 
 * Dawson R. Engler, "The Exokernel Operating System Architecture", October 1998.

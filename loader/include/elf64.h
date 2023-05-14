@@ -11,18 +11,23 @@
 #define ELF_IDENT_CLASS_64 2
 #define ELF_ISA_X86_64 0x3E
 #define ELF_ORIGIN_VERSION 1
+#define ELF_ET_DYN 0x03
 
 #define ELF_SECTION_BSS ".bss"
+#define ELF_SECTION_GOT ".got"
 #define ELF_SECTION_RELA ".rela"
 
+#define ELF_SHT_NOTE 0x1
 #define ELF_SHT_RELA 0x4
 #define ELF_SHT_DYNSYM 0xb
+#define ELF_SHT_PROGBITS 0x1
 
 enum {
-  R_x86_64_NONE = 0,
-
-  R_x86_64_64 = 1,
-  R_X86_64_RELATIVE = 8
+  R_AMD64_NONE = 0,
+  R_AMD64_64 = 1,
+  R_AMD64_GLOB_DAT = 6,
+  R_AMD64_JUMP_SLOT = 7,
+  R_AMD64_RELATIVE = 8
 };
 
 #pragma pack(push, 1)
@@ -34,7 +39,7 @@ typedef struct {
   uint8_t version;
   uint8_t abi;
   uint8_t abi_version;
-  uint32_t : 32;// not used
+  uint32_t : 32; // not used
   uint16_t : 16;
   uint8_t : 8;
 } elf64_identify_t;
@@ -90,18 +95,19 @@ typedef struct {
 typedef struct {
   uintptr_t file_start; // module start
   uintptr_t file_end;   // module end
-  uint64_t entry;     // entry address
+  uint64_t entry;       // entry address
+  bool is_shared;       // is shared object
 } elf64_t;
 
 /**
  * init the elf64 executable file
  *
  * @param file elf64 file
- * @param physical_location
+ * @param location
  *  the physical memory where the ELF file will be located.(optional)
  * @return
  */
-bool elf64_init_executable(elf64_t *file, uintptr_t physical_location);
+bool elf64_init_executable(elf64_t *file);
 
 /**
  * relocate the relocatable elf64 executable file
@@ -112,4 +118,4 @@ bool elf64_init_executable(elf64_t *file, uintptr_t physical_location);
  */
 bool elf64_relocate_executable(const elf64_t *file, uint64_t location);
 
-#endif //LAONOS_LOADER_INCLUDE_ELF64_H
+#endif // LAONOS_LOADER_INCLUDE_ELF64_H
