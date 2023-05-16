@@ -6,8 +6,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "inline.h"
+#include "info.h"
+#include "module.h"
 #include "platform/i386/gdt.h"
+#include "platform/i386/inline.h"
 
 /* gdt */
 
@@ -54,11 +56,19 @@ static void add_segment(int index, uint8_t access_byte, uint8_t flags) {
 
 // page table array
 
-static uintptr_t create_page_tables(uintptr_t address, bool is_5_level_support);
+static uintptr_t get_end_address(const module_t modules[]);
+
+static uintptr_t create_kernel_page_tables(const module_t *module,
+                                           uintptr_t address,
+                                           bool is_5_level_support);
 inline static void add_page_table(uintptr_t address, size_t index,
                                   uint64_t value);
 
-bool platform_post_init(const elf64_t *kernel_file) {
+bool platform_post_init(const module_t modules[]) {
+  if (!modules->is_kernel) {
+    printf("Error: kernel load fail.\n");
+    return false;
+  }
   if (!is_long_mod_support()) {
     printf("Error: CPU not supported 64-bit(long) mode.\n");
     return false;
@@ -67,7 +77,7 @@ bool platform_post_init(const elf64_t *kernel_file) {
   // init paging
   bool level = is_5_level_support();
   const uintptr_t page_address =
-      create_page_tables(kernel_file->file_end, level);
+      create_kernel_page_tables(modules, get_end_address(modules), level);
   page_init(page_address, level);
   if (level) {
     puts("- Enable 5-level paging.\n");
@@ -75,25 +85,41 @@ bool platform_post_init(const elf64_t *kernel_file) {
 
   status_print(puts("Setup long-mode"), true);
 
-  x86_64_enter_kernel(kernel_file->entry);
+  x86_64_enter_kernel(modules->entry);
 
   return true;
 }
 
-static uintptr_t create_page_tables(uintptr_t address,
-                                    bool is_5_level_support) {
-  const int table_count = is_5_level_support ? 2 : 1;
+static uintptr_t get_end_address(const module_t modules[]) {
+  uintptr_t end_address;
+  for (int i = 0; i < is_module(&modules[i]); ++i) {
+    end_address = modules[i].module_end;
+  }
+  return ALIGN(end_address, 0x1000);
+}
 
-  address = ALIGN(address, 0x1000);
+static uintptr_t create_kernel_page_tables(const module_t *module,
+                                           uintptr_t address,
+                                           bool is_5_level_support) {
+  const int table_count = is_5_level_support ? 2 : 1;
+  int pd_index = module->virtual_start / OS_MEMORY_ALIGN;
+  int pdp_index = 480;
+
   memset((uintptr_t *)address, 0, 0x1000 * (table_count + 2));
+
+  if ((pd_index / 512) > 0) {
+    pd_index -= 512;
+    pdp_index++;
+  }
 
   // page directory
   add_page_table(address, 0, 0x83);
+  add_page_table(address, pd_index, 0x83);
 
   // page directory pointer
   address += 0x1000;
   add_page_table(address, 0, address - 0x1000 | 3);
-  add_page_table(address, 480, address - 0x1000 | 3);
+  add_page_table(address, pdp_index, address - 0x1000 | 3);
 
   // page map level-4, page map level-5
   for (int i = 0; i < table_count; ++i) {

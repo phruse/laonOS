@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: MIT
 
 #include "elf64.h"
+#include "module.h"
 
 #include <macro.h>
 #include <stdio.h>
@@ -14,17 +15,17 @@ inline static char *elf64_shstrtab(elf64_file_t *file_ptr);
 static elf64_section_t *elf64_section_name(elf64_file_t *file_ptr,
                                            const char *name);
 
-bool elf64_init_executable(elf64_t *file) {
-  uint32_t file_size = file->file_end - file->file_start;
+bool elf64_init_executable(module_t *module) {
+  uint32_t file_size = module->module_end - module->module_start;
   uint32_t align_size = ALIGN(file_size, 64);
 
-  uintptr_t location = file->file_start;
-  file->file_start = location;
-  file->file_end = location + align_size;
+  uintptr_t location = module->module_start;
+  module->module_start = location;
+  module->module_end = location + align_size;
 
   elf64_file_t *header = (elf64_file_t *)location;
-  file->entry = header->entry;
-  file->is_shared = header->type == ELF_ET_DYN;
+  module->entry = header->entry;
+  module->is_shared = header->type == ELF_ET_DYN;
 
   // check ELF magic
   if (header->identify.magic != ELF_MAGIC) {
@@ -58,9 +59,9 @@ bool elf64_init_executable(elf64_t *file) {
 
 #define OFFSET(DATA) (file_address + DATA)
 
-bool elf64_relocate_executable(const elf64_t *file, uint64_t location) {
-  elf64_file_t *header = (elf64_file_t *)file->file_start;
-  const uint64_t file_address = file->file_start;
+bool elf64_relocate_executable(const module_t *module, uint64_t location) {
+  elf64_file_t *header = (elf64_file_t *)module->module_start;
+  const uint64_t file_address = module->module_start;
 
   const elf64_section_t *relocate_section =
       elf64_section_name(header, ELF_SECTION_RELA);

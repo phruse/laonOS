@@ -7,7 +7,7 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-#include "elf64.h"
+#include "module.h"
 
 /**
  * multiboot2 initialize
@@ -15,7 +15,7 @@
  * @param info_address multiboot2 structure address
  * @return if successful return true and otherwise return false
  */
-bool multiboot2_init(uintptr_t info_address, elf64_t *kernel_file);
+bool multiboot2_init(uintptr_t info_address, module_t modules[]);
 
 /**
  * check booting to multiboot2

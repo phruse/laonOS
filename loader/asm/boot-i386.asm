@@ -3,9 +3,9 @@
 [bits 32] ;run in 32bit mode(protected mode)
 
 global main
-extern loader_main ;C loader entrypoint
+extern lmain ;C loader entrypoint
 
-OS_STACK_SIZE equ 2048      ;OS's stack size (2kb)
+OS_STACK_SIZE equ 2048 ;OS's stack size (2kb)
 TBALE equ 1048576
 
 align 8
@@ -33,8 +33,8 @@ main:
   mov ebp, esp      ;set base pointer register (legacy)
 
   push ebx          ;passing boot information as loader_main argument
-  push eax          ;passing magic value as loader_main argument
-  call loader_main
+  push eax          ;passing magic value as lmain argument
+  call lmain
 
   hlt	            ;make idle state to the processor.
 

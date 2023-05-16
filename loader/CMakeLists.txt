@@ -13,7 +13,7 @@ include(src/CMakeLists.txt)
 include(std/src/CMakeLists.txt)
 
 set(LOADER_CODE
-        loader.asm
+        asm/boot-${LOADER_PLATFORM}.asm
         loader.c
         ${LOADER_SRC}
         ${LOADER_STANDARD_SRC}
@@ -29,6 +29,7 @@ set(LOADER_C_FLAG
         -march=${LOADER_PLATFORM}              # generate instructions
         -Wno-language-extension-token          # asm
         -mcmodel=kernel                        # memory restriction, 2G code section
+        -mrdrnd                                # random
 )
 target_compile_options(${LOADER_NAME} PUBLIC
         "$<$<COMPILE_LANGUAGE:C>:${LOADER_C_FLAG}>"

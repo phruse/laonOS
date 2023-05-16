@@ -7,6 +7,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+#include "module.h"
+
 #define ELF_MAGIC 0x464c457f
 #define ELF_IDENT_CLASS_64 2
 #define ELF_ISA_X86_64 0x3E
@@ -14,13 +16,11 @@
 #define ELF_ET_DYN 0x03
 
 #define ELF_SECTION_BSS ".bss"
-#define ELF_SECTION_GOT ".got"
 #define ELF_SECTION_RELA ".rela"
 
 #define ELF_SHT_NOTE 0x1
 #define ELF_SHT_RELA 0x4
 #define ELF_SHT_DYNSYM 0xb
-#define ELF_SHT_PROGBITS 0x1
 
 enum {
   R_AMD64_NONE = 0,
@@ -92,30 +92,23 @@ typedef struct {
 
 #pragma pack(pop)
 
-typedef struct {
-  uintptr_t file_start; // module start
-  uintptr_t file_end;   // module end
-  uint64_t entry;       // entry address
-  bool is_shared;       // is shared object
-} elf64_t;
-
 /**
  * init the elf64 executable file
  *
- * @param file elf64 file
+ * @param module elf64 module
  * @param location
  *  the physical memory where the ELF file will be located.(optional)
  * @return
  */
-bool elf64_init_executable(elf64_t *file);
+bool elf64_init_executable(module_t *module);
 
 /**
  * relocate the relocatable elf64 executable file
  *
- * @param file elf64 file
+ * @param module elf64 module
  * @param location address to relocate
  * @return
  */
-bool elf64_relocate_executable(const elf64_t *file, uint64_t location);
+bool elf64_relocate_executable(const module_t *module, uint64_t location);
 
 #endif // LAONOS_LOADER_INCLUDE_ELF64_H
