@@ -3,6 +3,7 @@
 cmake_minimum_required(VERSION 3.20)
 
 set(laonOS_NAME laonOS)
+
 set(CMAKE_ASM_NASM_OBJECT_FORMAT elf) # NASM elf format build
 set(CMAKE_C_COMPILER_WORKS 1)
 
@@ -14,7 +15,6 @@ project(${laonOS_NAME}
         DESCRIPTION "OS that various pH coexists."
 )
 
-message(NOTICE "Hello!")
 message("")
 message(NOTICE "Project ${CMAKE_PROJECT_NAME}")
 message(NOTICE "Build Version ${CMAKE_PROJECT_VERSION}")
@@ -72,7 +72,7 @@ set(OS_C_FLAGS
         -mno-red-zone       # avoid interrupt handler problem
 
         $<$<CONFIG:Debug>:-Wno-error=unused-variable>
-        $<$<PLATFORM_ID:Darwin>:-Wno-error=unused-command-line-argument>
+        $<$<PLATFORM_ID:Darwin>:-Wno-unused-command-line-argument>
 )
 set(OS_CXX_FLAGS
         -fuse-cxa-atexit        # do not add a unload destructor
@@ -81,9 +81,6 @@ set(OS_CXX_FLAGS
         -fno-rtti               # same reason, and not required to OS
 )
 set(OS_LINKER_FLAGS
-        -n                              # read only text section
-        -no-pie                         # no pie code
-        -static                         # link only static library
         -nostdlib                       # block linking std library
         -L${LAON-OS_CLANG_LIB_DIR}      # compiler-rt dir
 )
@@ -111,63 +108,5 @@ add_subdirectory(kernel)
 message("")
 add_subdirectory(loader)
 message("")
-
-# image
-# |-boot
-#   |- grub
-#     |- grub.cfg
-#   |- loader.elf
-#   |- kernel.m
-
-if (CMAKE_BUILD_TYPE STREQUAL "Release")
-    add_custom_target(${laonOS_NAME} ALL
-            BYPRODUCTS
-            "${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/${CMAKE_PROJECT_NAME}.iso"
-            "${CMAKE_BINARY_DIR}/image/boot/grub/grub.cfg"
-            COMMENT "Creation ISO image..."
-            COMMAND ${CMAKE_COMMAND} -E remove_directory
-                "${CMAKE_BINARY_DIR}/image/boot/grub" # clean old folder
-            COMMAND ${CMAKE_COMMAND} -E copy
-                "${CMAKE_SOURCE_DIR}/loader/grub/grub.cfg"
-            "${CMAKE_BINARY_DIR}/image/boot/grub/grub.cfg" # copy grub setting
-            COMMAND ${CMAKE_COMMAND} -E make_directory
-                "${CMAKE_BINARY_DIR}/extract"
-            COMMAND ${LAON-OS_GRUB_DIR} -o
-                "${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}.iso"
-            "${CMAKE_BINARY_DIR}/image" # create image
-            COMMAND ${LAON-OS_XORRISO_DIR} -osirrox on -indev
-                "${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}.iso"
-            -extract / "${CMAKE_BINARY_DIR}/extract" # extract ISO
-            COMMAND chmod -R +w "${CMAKE_BINARY_DIR}/extract"
-            COMMAND cd "${CMAKE_BINARY_DIR}/extract"
-            COMMAND find ./* -type f | xargs sha1sum | sed 's/.\\\//\\\//'
-            > "${CMAKE_BINARY_DIR}/extract/sha1.txt" # hash
-            COMMAND ${LAON-OS_GRUB_DIR} -o
-                "${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/${CMAKE_PROJECT_NAME}.iso"
-            "${CMAKE_BINARY_DIR}/extract"
-            COMMAND ${CMAKE_COMMAND} -E remove_directory
-                "${CMAKE_BINARY_DIR}/extract" # clean
-    )
-else ()
-    add_custom_target(${laonOS_NAME} ALL
-            BYPRODUCTS
-            "${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/${CMAKE_PROJECT_NAME}.iso"
-            "${CMAKE_BINARY_DIR}/image/boot/grub/grub.cfg"
-            COMMENT "Creation ISO image..."
-            COMMAND ${CMAKE_COMMAND} -E remove_directory
-                "${CMAKE_BINARY_DIR}/image/boot/grub" # clean old folder
-            COMMAND ${CMAKE_COMMAND} -E copy
-                "${CMAKE_SOURCE_DIR}/loader/grub/grub_debug.cfg"
-            "${CMAKE_BINARY_DIR}/image/boot/grub/grub.cfg" # copy grub setting
-            COMMAND ${LAON-OS_GRUB_DIR} -o
-                "${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/${CMAKE_PROJECT_NAME}.iso"
-            "${CMAKE_BINARY_DIR}/image" # create image
-    )
-endif()
-
-# kernel
-add_dependencies(${laonOS_NAME} ${KERNEL_NAME})
-# loader
-add_dependencies(${laonOS_NAME} ${LOADER_NAME})
 
 #TODO analytics, install
