@@ -29,9 +29,3 @@ It is an operating system for study.
 * GNU GRUB 2 (`grub-mkrescue`)
 
 Read more `cmake/Tools.cmake`
-
-## 📚 References
-
-This project would not have been possible without the help of these papers.
-
-* Dawson R. Engler, "The Exokernel Operating System Architecture", October 1998.
