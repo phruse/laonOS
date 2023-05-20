@@ -19,12 +19,12 @@ function(build_binary target output src)
     )
 
     set(SYM_DIR ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/${target}.sym)
-    set(LAON-OS_OBJCOPY_EXTRACT
-            ${LAON-OS_OBJCOPY} --only-keep-debug
+    set(LAON_OBJCOPY_EXTRACT
+            ${LAON_OBJCOPY} --only-keep-debug
             "${output}/${target}.elf" ${SYM_DIR}
     )
-    set(LAON-OS_OBJCOPY_REMOVE
-            ${LAON-OS_OBJCOPY} --strip-debug
+    set(LAON_OBJCOPY_REMOVE
+            ${LAON_OBJCOPY} --strip-debug
             "${output}/${target}.elf"
     )
     add_custom_command(TARGET ${target}
@@ -34,8 +34,8 @@ function(build_binary target output src)
             COMMAND ${CMAKE_COMMAND} -E remove ${SYM_DIR}
             COMMAND ${CMAKE_COMMAND} -E make_directory
                 "${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}"
-            COMMAND "$<$<CONFIG:Debug>:${LAON-OS_OBJCOPY_EXTRACT}>"
-            COMMAND "$<$<CONFIG:Release>:${LAON-OS_OBJCOPY_REMOVE}>"
+            COMMAND "$<$<CONFIG:Debug>:${LAON_OBJCOPY_EXTRACT}>"
+            COMMAND "$<$<CONFIG:Release>:${LAON_OBJCOPY_REMOVE}>"
             COMMAND_EXPAND_LISTS
             VERBATIM
     )

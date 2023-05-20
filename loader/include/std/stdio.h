@@ -9,6 +9,9 @@
 #include "utilities.h"
 #include <stddef.h>
 
+#define CONSOLE_WIDTH 80
+#define CONSOLE_HEIGHT 25
+
 /**
  * clear console screen
  */

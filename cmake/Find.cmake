@@ -13,9 +13,9 @@ macro(find_build_tools)
             set(CMAKE_C_COMPILER "clang")
             set(CMAKE_C_COMPILER_ID "Clang")
         endif()
-        if(NOT DEFINED LAON-OS_CLANG_LIB_DIR)
+        if(NOT DEFINED LAON_CLANG_LIB_DIR)
             # compiler runtime library dir
-            set(LAON-OS_CLANG_LIB_DIR "/lib/clang/13.0.1/lib/linux")
+            set(LAON_CLANG_LIB_DIR "/lib/clang/13.0.1/lib/linux")
         endif()
         if(NOT DEFINED CMAKE_ASM_NASM_COMPILER)
             # NASM dir
@@ -25,50 +25,50 @@ macro(find_build_tools)
             # linker dir
             set(CMAKE_LINKER "ld.lld")
         endif()
-        if(NOT DEFINED LAON-OS_GRUB_DIR)
+        if(NOT DEFINED LAON_GRUB_DIR)
             # tool for creating grub image
-            set(LAON-OS_GRUB_DIR "grub-mkrescue")
+            set(LAON_GRUB_DIR "grub-mkrescue")
         endif()
-        if(NOT DEFINED LAON-OS_XORRISO_DIR)
+        if(NOT DEFINED LAON_XORRISO_DIR)
             # iso tool
-            set(LAON-OS_XORRISO_DIR "xorriso")
+            set(LAON_XORRISO_DIR "xorriso")
         endif()
-        if(NOT DEFINED LAON-OS_OBJCOPY)
+        if(NOT DEFINED LAON_OBJCOPY)
             # debug symbol tool
-            set(LAON-OS_OBJCOPY "llvm-objcopy-13")
+            set(LAON_OBJCOPY "llvm-objcopy-13")
         endif()
     elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
-        set(LAON-OS_HOMEBREW_DIR "/opt/homebrew/opt")
+        set(LAON_HOMEBREW_DIR "/opt/homebrew/opt")
 
         if(NOT DEFINED CMAKE_C_COMPILER)
             # clang does not need cross compiler build
-            set(CMAKE_C_COMPILER "${LAON-OS_HOMEBREW_DIR}/llvm/bin/clang")
+            set(CMAKE_C_COMPILER "${LAON_HOMEBREW_DIR}/llvm/bin/clang")
             set(CMAKE_C_COMPILER_ID "Clang")
         endif()
-        if(NOT DEFINED LAON-OS_CLANG_LIB_DIR)
+        if(NOT DEFINED LAON_CLANG_LIB_DIR)
             # compiler runtime library dir
-            set(LAON-OS_CLANG_LIB_DIR "/usr/local/lib/clang/linux")
+            set(LAON_CLANG_LIB_DIR "/usr/local/lib/clang/linux")
         endif()
         if(NOT DEFINED CMAKE_ASM_NASM_COMPILER)
             # NASM dir
-            set(CMAKE_ASM_NASM_COMPILER "${LAON-OS_HOMEBREW_DIR}/nasm/bin/nasm")
+            set(CMAKE_ASM_NASM_COMPILER "${LAON_HOMEBREW_DIR}/nasm/bin/nasm")
         endif()
         if(NOT DEFINED CMAKE_LINKER)
             # linker dir
-            set(CMAKE_LINKER "${LAON-OS_HOMEBREW_DIR}/llvm/bin/ld.lld")
+            set(CMAKE_LINKER "${LAON_HOMEBREW_DIR}/llvm/bin/ld.lld")
         endif()
-        if(NOT DEFINED LAON-OS_GRUB_DIR)
+        if(NOT DEFINED LAON_GRUB_DIR)
             # tool for creating grub image
-            set(LAON-OS_GRUB_DIR "grub-mkrescue")
+            set(LAON_GRUB_DIR "grub-mkrescue")
         endif()
-        if(NOT DEFINED LAON-OS_XORRISO_DIR)
+        if(NOT DEFINED LAON_XORRISO_DIR)
             # iso tool
-            set(LAON-OS_XORRISO_DIR
-                    "${LAON-OS_HOMEBREW_DIR}/xorriso/bin/xorriso")
+            set(LAON_XORRISO_DIR
+                    "${LAON_HOMEBREW_DIR}/xorriso/bin/xorriso")
         endif()
-        if(NOT DEFINED LAON-OS_OBJCOPY)
+        if(NOT DEFINED LAON_OBJCOPY)
             # debug symbol tool
-            set(LAON-OS_OBJCOPY "${LAON-OS_HOMEBREW_DIR}/llvm/bin/llvm-objcopy")
+            set(LAON_OBJCOPY "${LAON_HOMEBREW_DIR}/llvm/bin/llvm-objcopy")
         endif()
     endif()
 
@@ -79,9 +79,9 @@ macro(find_build_tools)
     program_check(${CMAKE_C_COMPILER} "Clang")
     program_check(${CMAKE_LINKER} "LD")
     program_check(${CMAKE_ASM_NASM_COMPILER} "NASM")
-    program_check(${LAON-OS_XORRISO_DIR} "xorriso")
-    program_check(${LAON-OS_GRUB_DIR} "grub-mkrescue")
-    program_check(${LAON-OS_OBJCOPY} "llvm-objcopy")
+    program_check(${LAON_XORRISO_DIR} "xorriso")
+    program_check(${LAON_GRUB_DIR} "grub-mkrescue")
+    program_check(${LAON_OBJCOPY} "llvm-objcopy")
 
     list(POP_BACK CMAKE_MESSAGE_INDENT)
     message(CHECK_PASS "all tools found")
@@ -108,7 +108,7 @@ endfunction()
 macro(library_check path name)
     message(CHECK_START "Finding ${name}")
     find_library(IS_${name} ${path}
-            HINT ${LAON-OS_CLANG_LIB_DIR})
+            HINT ${LAON_CLANG_LIB_DIR})
     print_check(${IS_${name}} ${name})
 endmacro()
 

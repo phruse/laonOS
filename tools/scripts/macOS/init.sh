@@ -11,7 +11,6 @@ if [[ $? != 0 ]] ; then
 fi
 brew install \
 cmake nasm llvm autoconf automake x86_64-elf-gcc qemu ninja coreutils \
-knazarov/qemu-virgl/qemu-virgl \
 > "$LOGDIR" 2>&1
 
 TEMPDIR=$(mktemp -d 2>/dev/null || mktemp -d -t 'laon_os_init_temp')
@@ -66,7 +65,7 @@ cd grub-build
 
 echo " - Configuring"
 ../grub/configure --disable-werror TARGET_CC=x86_64-elf-gcc \
-TARGET_LAON-OS_OBJCOPY=x86_64-elf-objcopy \
+TARGET_LAON_OBJCOPY=x86_64-elf-objcopy \
 TARGET_STRIP=x86_64-elf-strip \
 TARGET_NM=x86_64-elf-nm \
 TARGET_RANLIB=x86_64-elf-ranlib \

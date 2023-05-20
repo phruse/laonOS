@@ -5,13 +5,15 @@
 #include <macro.h>
 #include <string.h>
 
+// rand
+
 static uint32_t memory = 0;
 extern int init_seed(void);
 
 void srand(uint32_t seed) { memory = seed; }
 
 int rand(void) { // feat: secure random _rdrand32_step
-  // Reference: C standard
+  // reference: C standard
   if (memory == 0) {
     srand(init_seed());
   }
@@ -20,17 +22,15 @@ int rand(void) { // feat: secure random _rdrand32_step
   return (int)(memory / 65536) % RAND_MAX;
 }
 
-#pragma pack(push, 1)
+// malloc, free
 
-typedef struct free_list { // 8bytes
+#define ITERATOR_INFO(INFO) for (; INFO->next != NULL; INFO = INFO->next)
+
+typedef struct __attribute__((packed)) free_list { // 8bytes
   struct free_list *next;
   uint16_t size;
   uint16_t is_free;
 } allocate_info_t;
-
-#pragma pack(pop)
-
-#define ITERATOR_INFO(INFO) for (; INFO->next != NULL; INFO = INFO->next)
 
 uintptr_t *free_start = (uintptr_t *)FREE_MIN;
 static const size_t info_offset = sizeof(allocate_info_t);
