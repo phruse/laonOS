@@ -68,52 +68,10 @@ endif ()
 #   |- kernel.m
 
 if (CMAKE_BUILD_TYPE STREQUAL "Release")
-    add_custom_target(${laonOS_NAME} ALL
-            BYPRODUCTS
-            "${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/${CMAKE_PROJECT_NAME}.iso"
-            "${CMAKE_BINARY_DIR}/image/boot/grub/grub.cfg"
-            COMMENT "Creation ISO image..."
-            COMMAND ${CMAKE_COMMAND} -E remove_directory
-            "${CMAKE_BINARY_DIR}/image/boot/grub" # clean old folder
-            COMMAND ${CMAKE_COMMAND} -E copy
-            "${CMAKE_SOURCE_DIR}/loader/configs/grub.cfg"
-            "${CMAKE_BINARY_DIR}/image/boot/grub/grub.cfg" # copy grub setting
-            COMMAND ${CMAKE_COMMAND} -E make_directory
-            "${CMAKE_BINARY_DIR}/extract"
-            COMMAND ${LAON_GRUB_DIR} -o
-            "${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}.iso"
-            "${CMAKE_BINARY_DIR}/image" # create image
-            COMMAND ${LAON_XORRISO_DIR} -osirrox on -indev
-            "${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}.iso"
-            -extract / "${CMAKE_BINARY_DIR}/extract" # extract ISO
-            COMMAND chmod -R +w "${CMAKE_BINARY_DIR}/extract"
-            COMMAND cd "${CMAKE_BINARY_DIR}/extract"
-            COMMAND find ./* -type f | xargs sha1sum | sed 's/.\\\//\\\//'
-            > "${CMAKE_BINARY_DIR}/extract/sha1.txt" # hash
-            COMMAND ${LAON_GRUB_DIR} -o
-            "${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/${CMAKE_PROJECT_NAME}.iso"
-            "${CMAKE_BINARY_DIR}/extract"
-            COMMAND ${CMAKE_COMMAND} -E remove_directory
-            "${CMAKE_BINARY_DIR}/extract" # clean
-            )
+    build_iso_secure(${laonOS_NAME} "loader/configs/grub.cfg")
 else ()
-    add_custom_target(${laonOS_NAME} ALL
-            BYPRODUCTS
-            "${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/${CMAKE_PROJECT_NAME}.iso"
-            "${CMAKE_BINARY_DIR}/image/boot/grub/grub.cfg"
-            COMMENT "Creation ISO image..."
-            COMMAND ${CMAKE_COMMAND} -E remove_directory
-            "${CMAKE_BINARY_DIR}/image/boot/grub" # clean old folder
-            COMMAND ${CMAKE_COMMAND} -E copy
-            "${CMAKE_SOURCE_DIR}/loader/configs/grub-debug.cfg"
-            "${CMAKE_BINARY_DIR}/image/boot/grub/grub.cfg" # copy grub setting
-            COMMAND ${LAON_GRUB_DIR} -o
-            "${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/${CMAKE_PROJECT_NAME}.iso"
-            "${CMAKE_BINARY_DIR}/image" # create image
-            )
+    build_iso(${laonOS_NAME} "loader/configs/grub-debug.cfg")
 endif ()
 
-# kernel
-add_dependencies(${laonOS_NAME} ${KERNEL_NAME})
-# loader
-add_dependencies(${laonOS_NAME} ${LOADER_NAME})
+add_dependencies(${laonOS_NAME} ${KERNEL_NAME}) # kernel
+add_dependencies(${laonOS_NAME} ${LOADER_NAME}) # loader

@@ -15,7 +15,7 @@ macro(find_build_tools)
         endif()
         if(NOT DEFINED LAON_CLANG_LIB_DIR)
             # compiler runtime library dir
-            set(LAON_CLANG_LIB_DIR "/lib/clang/13.0.1/lib/linux")
+            set(LAON_CLANG_LIB_DIR "/lib/clang/14.0.0/lib/linux") # TODO version
         endif()
         if(NOT DEFINED CMAKE_ASM_NASM_COMPILER)
             # NASM dir
@@ -35,7 +35,7 @@ macro(find_build_tools)
         endif()
         if(NOT DEFINED LAON_OBJCOPY)
             # debug symbol tool
-            set(LAON_OBJCOPY "llvm-objcopy-13")
+            set(LAON_OBJCOPY "llvm-objcopy")
         endif()
     elseif(${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
         set(LAON_HOMEBREW_DIR "/opt/homebrew/opt")

@@ -19,20 +19,25 @@ message(NOTICE "Build Version ${CMAKE_PROJECT_VERSION}")
 message("")
 
 include(Setting) # load setting
+include(Tools)
 
-include(Find)
 find_build_tools() # tools check
 message("")
 find_build_library() # library check
+message("")
 
 # default build flags
-set(CMAKE_C_STANDARD 17)
+set(CMAKE_C_STANDARD 23)
 set(CMAKE_CXX_STANDARD 23)
+set(CMAKE_CXX_STANDARD_REQUIRED YES)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-if(LAON_TEST)
-message("")
-add_subdirectory(test/server)
-endif()
+if (LAON_TEST)
+    include(CTest)
+    enable_testing()
+
+    add_subdirectory(test/server)
+endif ()
 
 # reset
 set(CMAKE_C_FLAGS "")
@@ -100,7 +105,7 @@ add_compile_options(
         "$<$<PLATFORM_ID:Darwin>:-D__APPLE__>"
 )
 add_compile_definitions(
-        OS_VERSION=${CMAKE_PROJECT_VERSION}
+        OS_VERSION="${CMAKE_PROJECT_VERSION}"
 )
 add_link_options(
         "$<$<CONFIG:Debug>:${OS_FLAGS_DEBUG}>"
@@ -109,6 +114,10 @@ add_link_options(
 )
 
 set(TEMP_OUTPUT ${CMAKE_BINARY_DIR}/image/boot)
+
+if (LAON_TEST)
+    add_subdirectory(test/client)
+endif ()
 
 message("")
 add_subdirectory(kernel)
