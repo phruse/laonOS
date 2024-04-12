@@ -1,7 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-#include "loader.h"
+#include "main.h"
 
+#include "multiboot.h"
 #include "stdio.h"
 #include "utilities.h"
 
@@ -10,14 +11,22 @@
 #include "module.h"
 #include "platform.h"
 
+#ifdef TEST_ENABLE
+#include "test.h"
+#endif
+
 #define STR_CHECK "Bootloader check"
 #define STR_MB "Multiboot2 init"
 
 #define STR_PRE_INIT "Set GDT"
-#define STR_POST_INIT "Setup long-mode"
+#define STR_POST_INIT "Jump to kernel!"
 
-_Noreturn void lmain(uint32_t magic_value, uintptr_t info_address) {
-  clear_screen();
+_Noreturn void main(uint32_t magic_value, uintptr_t info_address) {
+  init_screen();
+
+#ifdef TEST_ENABLE
+  TEST_START;
+#endif
 
   printf("> laonOS %s loader\n", OS_VERSION);
 

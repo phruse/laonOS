@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 
 #pragma once
-#ifndef LAONOS_LOADER_STANDARD_INCLUDE_STRING_H
-#define LAONOS_LOADER_STANDARD_INCLUDE_STRING_H
+#ifndef LAONOS_LOADER_INCLUDE_STD_STRING_H
+#define LAONOS_LOADER_INCLUDE_STD_STRING_H
 
 #include <stdbool.h>
 #include <stddef.h>
@@ -27,12 +27,30 @@ int strcmp(const char *first_str, const char *second_str);
 size_t strcpy_s(char *dest, size_t size, const char *src);
 
 /**
+ * find string
+ *
+ * @param str source string
+ * @param find_str find string
+ * @return first occurrence in str
+ */
+const char *strstr(const char *str, const char *find_str);
+
+/**
+ * split string
+ *
+ * @param str source string
+ * @param delim delimiter
+ * @return
+ */
+char *strtok(char *str, const char *delim);
+
+/**
  * return the length of the string.
  *
- * @param string input string
+ * @param str input string
  * @return length of string
  */
-size_t strlen(const char *string);
+size_t strlen(const char *str);
 
 /**
  * set memory
@@ -42,7 +60,7 @@ size_t strlen(const char *string);
  * @param size number of bytes
  * @return input prt
  */
-void *memset(uintptr_t *ptr, int number, size_t size);
+void *memset(void *ptr, int number, size_t size);
 
 /**
  * copy memory
@@ -52,6 +70,6 @@ void *memset(uintptr_t *ptr, int number, size_t size);
  * @param size copy size
  * @return input destination
  */
-void *memcpy(uintptr_t *dest, const uintptr_t *src, size_t size);
+void *memcpy(void *dest, const void *src, size_t size);
 
-#endif // LAONOS_LOADER_STANDARD_INCLUDE_STRING_H
+#endif // LAONOS_LOADER_INCLUDE_STD_STRING_H

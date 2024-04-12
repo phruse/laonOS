@@ -6,10 +6,10 @@
 #include <stdio.h>
 #include <string.h>
 
-#include "info.h"
-#include "module.h"
 #include "gdt.h"
+#include "info.h"
 #include "inline.h"
+#include "module.h"
 
 /* gdt */
 
@@ -65,6 +65,7 @@ inline static void add_page_table(uintptr_t address, size_t index,
                                   uint64_t value);
 
 bool platform_post_init(const module_t modules[]) {
+  // first element
   if (!modules->is_kernel) {
     printf("Error: kernel load fail.\n");
     return false;
@@ -83,7 +84,7 @@ bool platform_post_init(const module_t modules[]) {
     puts("- Enable 5-level paging.\n");
   }
 
-  status_print(puts("Setup long-mode"), true);
+  status_print(puts("Jump to kernel!"), true);
 
   x86_64_enter_kernel(modules->entry);
 

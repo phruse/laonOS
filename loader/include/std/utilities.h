@@ -1,10 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-// SPDX-License-Identifier: MIT
-
 #pragma once
-#ifndef LAONOS_LOADER_STANDARD_INCLUDE_UTILITIES_H
-#define LAONOS_LOADER_STANDARD_INCLUDE_UTILITIES_H
+#ifndef LAONOS_LOADER_INCLUDE_STD_UTILITIES_H
+#define LAONOS_LOADER_INCLUDE_STD_UTILITIES_H
 
 #include <stdbool.h>
 #include <stddef.h>
@@ -33,4 +31,4 @@ void status_print(size_t length, bool status);
     status_print(puts(message), true);                                         \
   }
 
-#endif // LAONOS_LOADER_STANDARD_INCLUDE_UTILITIES_H
+#endif // LAONOS_LOADER_INCLUDE_STD_UTILITIES_H

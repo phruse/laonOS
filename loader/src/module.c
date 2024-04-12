@@ -11,3 +11,5 @@ void multiboot_converter(const multiboot_module_t *multiboot_module,
 bool is_module(const module_t *module) {
   return module->module_start != 0 && module->module_end != 0;
 }
+
+

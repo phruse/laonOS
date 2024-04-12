@@ -4,6 +4,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include "stdio.h"
+
 void *memset(uintptr_t *ptr, int number, size_t size) {
   asm("cld;"
       "rep; stosb;" ::"D"(ptr),

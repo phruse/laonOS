@@ -72,7 +72,7 @@ bool elf64_relocate_executable(const module_t *module, uint64_t location) {
   if (!relocate_section || !dynsym_section ||
       relocate_section->type != ELF_SHT_RELA ||
       dynsym_section->type != ELF_SHT_DYNSYM) {
-    printf("Warning: Not found relocation data!\n");
+    printf("Note: Not found relocation data.\n");
     return true;
   }
 

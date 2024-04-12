@@ -35,7 +35,16 @@ void clear_screen(void) {
   cursor_position();
 }
 
-void __putchar(const int character) {
+void __flush(void) {
+  serial_write('\0');
+  serial_write('\n');
+}
+
+char __getchar(void) {
+  return serial_read();
+}
+
+void __putchar(int character) {
   if (is_serial && character != '\0') {
     serial_write((char)character);
   }
@@ -56,18 +65,6 @@ void __putchar(const int character) {
                         CONSOLE_WIDTH * (CONSOLE_HEIGHT - 1) * 2)) {
     line_push();
   }
-}
-
-size_t __puts(const char *text) {
-  size_t length = 0;
-
-  // write text
-  while (*text) {
-    __putchar(*text++);
-    length++;
-  }
-
-  return length;
 }
 
 // set cursor position

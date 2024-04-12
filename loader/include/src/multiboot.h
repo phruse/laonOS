@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 
 #pragma once
-#ifndef LAONOS_LOADER_INCLUDE_MULTIBOOT_H
-#define LAONOS_LOADER_INCLUDE_MULTIBOOT_H
+#ifndef LAONOS_LOADER_INCLUDE_SRC_MULTIBOOT_H
+#define LAONOS_LOADER_INCLUDE_SRC_MULTIBOOT_H
 
 #include <stdint.h>
 
@@ -33,4 +33,4 @@ typedef struct {
   uint32_t memory_upper;
 } multiboot_meminfo_t;
 
-#endif // LAONOS_LOADER_INCLUDE_MULTIBOOT_H
+#endif // LAONOS_LOADER_INCLUDE_SRC_MULTIBOOT_H

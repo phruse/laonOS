@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 
 #pragma once
-#ifndef LAONOS_LOADER_INCLUDE_ELF64_H
-#define LAONOS_LOADER_INCLUDE_ELF64_H
+#ifndef LAONOS_LOADER_INCLUDE_SRC_ELF64_H
+#define LAONOS_LOADER_INCLUDE_SRC_ELF64_H
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -111,4 +111,4 @@ bool elf64_init_executable(module_t *module);
  */
 bool elf64_relocate_executable(const module_t *module, uint64_t location);
 
-#endif // LAONOS_LOADER_INCLUDE_ELF64_H
+#endif // LAONOS_LOADER_INCLUDE_SRC_ELF64_H

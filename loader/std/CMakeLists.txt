@@ -7,4 +7,4 @@ set(LOADER_STANDARD_SRC
         std/stdlib.c
         std/string.c
         std/utilities.c
-        )
+)

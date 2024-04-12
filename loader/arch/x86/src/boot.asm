@@ -2,8 +2,8 @@
 
 [bits 32] ;run in 32bit mode(protected mode)
 
-global main
-extern lmain ;C loader entrypoint
+global start
+extern main ;C loader entrypoint
 
 OS_STACK_SIZE equ 2048 ;OS's stack size (2kb)
 TBALE equ 1048576
@@ -26,7 +26,7 @@ multiboot2_end:
 
 section .text
 
-main:
+start:
   cli               ;interrupt blocking
 
   mov esp, os_stack ;set stack pointer register
@@ -34,7 +34,7 @@ main:
 
   push ebx          ;passing boot information as loader_main argument
   push eax          ;passing magic value as lmain argument
-  call lmain
+  call main
 
   hlt	            ;make idle state to the processor.
 

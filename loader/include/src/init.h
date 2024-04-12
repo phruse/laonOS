@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 
 #pragma once
-#ifndef LAONOS_LOADER_INCLUDE_INIT_H
-#define LAONOS_LOADER_INCLUDE_INIT_H
+#ifndef LAONOS_LOADER_INCLUDE_SRC_INIT_H
+#define LAONOS_LOADER_INCLUDE_SRC_INIT_H
 
 #include <stdbool.h>
 #include <stdint.h>
@@ -25,4 +25,4 @@ bool multiboot2_init(uintptr_t info_address, module_t modules[]);
  */
 bool check_bootloader(uint32_t magic_value);
 
-#endif // LAONOS_LOADER_INCLUDE_INIT_H
+#endif // LAONOS_LOADER_INCLUDE_SRC_INIT_H

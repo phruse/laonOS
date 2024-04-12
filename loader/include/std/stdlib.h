@@ -1,10 +1,8 @@
 // SPDX-License-Identifier: MIT
 
-// SPDX-License-Identifier: MIT
-
 #pragma once
-#ifndef LAONOS_LOADER_STD_INCLUDE_STDLIB_H
-#define LAONOS_LOADER_STD_INCLUDE_STDLIB_H
+#ifndef LAONOS_LOADER_INCLUDE_STD_STDLIB_H
+#define LAONOS_LOADER_INCLUDE_STD_STDLIB_H
 
 #include <stddef.h>
 #include <stdint.h>
@@ -13,6 +11,14 @@
 
 #define FREE_MIN 0x200000
 #define FREE_MAX 0x300000
+
+/**
+ * string to int
+ *
+ * @param str string to convert
+ * @return converted int
+ */
+int atoi(const char *str);
 
 /**
  * set seed
@@ -28,19 +34,4 @@ void srand(uint32_t seed);
  */
 int rand(void);
 
-/**
- * not stable. use only unit test
- *
- * @param size size of memory bytes
- * @return allocated memory
- */
-void *malloc(uint16_t size);
-
-/**
- * not stable. use only unit test
- *
- * @param ptr pointer for remove
- */
-void free(void *ptr);
-
-#endif // LAONOS_LOADER_STD_INCLUDE_STDLIB_H
+#endif // LAONOS_LOADER_INCLUDE_STD_STDLIB_H

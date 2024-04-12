@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 
 #pragma once
-#ifndef LAONOS_LOADER_INCLUDE_INLINE_I386_H
-#define LAONOS_LOADER_INCLUDE_INLINE_I386_H
+#ifndef LAONOS_LOADER_ARCH_I386_INCLUDE_SRC_INLINE_H
+#define LAONOS_LOADER_ARCH_I386_INCLUDE_SRC_INLINE_H
 
 #include <cpuid.h>
 #include <stdbool.h>
@@ -106,4 +106,4 @@ jump_64:
                "b"((uint32_t)((entry_address >> 32) & 0xFFFFFFFFLL)));
 }
 
-#endif // LAONOS_LOADER_INCLUDE_INLINE_I386_H
+#endif // LAONOS_LOADER_ARCH_I386_INCLUDE_SRC_INLINE_H

@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 
 #pragma once
-#ifndef LAONOS_LOADER_INCLUDE_PLATFORM_H
-#define LAONOS_LOADER_INCLUDE_PLATFORM_H
+#ifndef LAONOS_LOADER_INCLUDE_SRC_PLATFORM_H
+#define LAONOS_LOADER_INCLUDE_SRC_PLATFORM_H
 
 #include <stdbool.h>
 
@@ -22,4 +22,4 @@ bool platform_pre_init(void);
  */
 bool platform_post_init(const module_t modules[]);
 
-#endif // LAONOS_LOADER_INCLUDE_PLATFORM_H
+#endif // LAONOS_LOADER_INCLUDE_SRC_PLATFORM_H

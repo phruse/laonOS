@@ -17,7 +17,7 @@ enum {
 // interrupt
 #define NO_INTERRUPT_BIT 0x0
 // FIFO
-#define FIFO_ENABLE_BIT (1 << 0)
+#define FIFO_DISABLE_BIT (1 << 0)
 #define TRIGGER_LEVEL_3_BIT ((1 << 6) | (1 << 7))
 // line
 #define DIVISOR_LATCH_ACCESS_BIT (1 << 7)
@@ -25,26 +25,27 @@ enum {
 // moden
 #define IRQ_BIT (1 << 3)
 #define LOOPBACK_BIT ((1 << 1) | (1 << 4))
-#define OUT_BIT ((1 << 2) | (1 << 3))
+#define OUT_BIT (1 << 2)
 #define READY_BIT ((1 << 0) | (1 << 1))
 // status
 #define DATA_READY_BIT (1 << 0)
 #define EMPTY_BUFFER_BIT (1 << 5)
 // baud rate
-#define BAUD_115200 0x1
-#define BAUD_INFINITE 0x0
+#define BAUD 115200
+#define RATE_LOW ((115200 / BAUD) & 0xff)
+#define RATE_HIGH (uint8_t)((115200 / BAUD) >> 8)
 
 bool serial_init(void) {
   outb(COM_INTERRUPT, NO_INTERRUPT_BIT);
 
   // rate setting
   outb(COM_LINE_CONTROL, DIVISOR_LATCH_ACCESS_BIT);
-  outb(COM_PORT + 0, BAUD_115200);    // MIN
-  outb(COM_PORT + 1, BAUD_INFINITE);  // MAX
+  outb(COM_PORT + 0, RATE_LOW);       // MIN
+  outb(COM_PORT + 1, RATE_HIGH);      // MAX
   outb(COM_LINE_CONTROL, WORD_8_BIT); // 8BIT
 
   // general setting
-  outb(COM_FIFO_CONTROL, FIFO_ENABLE_BIT | TRIGGER_LEVEL_3_BIT);
+  outb(COM_FIFO_CONTROL, FIFO_DISABLE_BIT | TRIGGER_LEVEL_3_BIT);
   outb(COM_MODEM_CONTROL, IRQ_BIT | READY_BIT);
 
   // test
@@ -60,14 +61,17 @@ bool serial_init(void) {
   return true;
 }
 
+bool is_writable(void) { return (inb(COM_STATUS) & EMPTY_BUFFER_BIT) == 0; }
+bool is_readable(void) { return (inb(COM_STATUS) & DATA_READY_BIT) == 0; }
+
 void serial_write(char character) {
-  while ((inb(COM_STATUS) & EMPTY_BUFFER_BIT) == 0)
+  while (is_writable())
     ;
   outb(COM_PORT, character);
 }
 
 char serial_read(void) {
-  while ((inb(COM_STATUS) & DATA_READY_BIT) == 0)
+  while (is_readable())
     ;
   return inb(COM_PORT);
 }

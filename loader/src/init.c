@@ -46,7 +46,9 @@ bool multiboot2_init(uintptr_t info_address, module_t modules[]) {
   }
 
   if (is_module(modules) && modules->is_kernel == true) {
-    return load_module(modules, OS_MEMORY_VIRTUAL, true);
+    bool is_loaded = load_module(modules, OS_MEMORY_VIRTUAL_BEGIN, true);
+    ERROR_BOUNDARY(is_loaded, "Kernel module load")
+    return is_loaded;
   } else {
     printf("Error: Kernel module not found: %s\n", OS_KERNEL_NAME);
     return false;
@@ -75,8 +77,8 @@ static void insert_module(multiboot_module_t *tag, module_t modules[]) {
   }
 }
 
-static bool load_module(module_t *module, int64_t relocation, bool is_module) {
-  if (is_module) {
+static bool load_module(module_t *module, int64_t relocation, bool is_aslr) {
+  if (is_aslr) {
     uintptr_t aslr_address = aslr(module);
     relocation += aslr_address;
     module->virtual_start = aslr_address;

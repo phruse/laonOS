@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 
 #pragma once
-#ifndef LAONOS_LOADER_INCLUDE_GDT_H
-#define LAONOS_LOADER_INCLUDE_GDT_H
+#ifndef LAONOS_LOADER_ARCH_I386_INCLUDE_SRC_GDT_H
+#define LAONOS_LOADER_ARCH_I386_INCLUDE_SRC_GDT_H
 
 #include <stdint.h>
 
@@ -37,4 +37,4 @@ typedef struct {
 
 #pragma pack(pop)
 
-#endif // LAONOS_LOADER_INCLUDE_GDT_H
+#endif // LAONOS_LOADER_ARCH_I386_INCLUDE_SRC_GDT_H

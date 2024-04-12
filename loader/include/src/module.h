@@ -1,13 +1,15 @@
 // SPDX-License-Identifier: MIT
 
 #pragma once
-#ifndef LAONOS_LOADER_INCLUDE_MODULE_H
-#define LAONOS_LOADER_INCLUDE_MODULE_H
+#ifndef LAONOS_LOADER_INCLUDE_SRC_MODULE_H
+#define LAONOS_LOADER_INCLUDE_SRC_MODULE_H
 
 #include <stdbool.h>
 #include <stdint.h>
 
 #include "multiboot.h"
+
+#pragma pack(push, 1)
 
 typedef struct {
   uintptr_t module_start;  // module start
@@ -17,6 +19,14 @@ typedef struct {
   bool is_shared;          // is shared object
   bool is_kernel;          // is kernel module, allways index 0
 } module_t;
+
+typedef struct {
+  uint16_t tag_id;
+  uint16_t flag;
+  uint32_t data_size;
+} module_tag_t;
+
+#pragma pack(pop)
 
 /**
  * module initialized check
@@ -34,4 +44,4 @@ bool is_module(const module_t *module);
 void multiboot_converter(const multiboot_module_t *multiboot_module,
                          module_t *module);
 
-#endif // LAONOS_LOADER_INCLUDE_MODULE_H
+#endif // LAONOS_LOADER_INCLUDE_SRC_MODULE_H

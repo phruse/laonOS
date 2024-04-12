@@ -5,6 +5,7 @@
 #define LAONOS_LOADER_INCLUDE_SRC_SERIAL_H
 
 #include <stdbool.h>
+#include <stddef.h>
 
 /**
  * serial communication initialization
@@ -12,6 +13,20 @@
  * @return if the serial port is working returns true
  */
 bool serial_init(void);
+
+/**
+ * ready to write
+ *
+ * @return if writable returns true
+ */
+bool is_writable(void);
+
+/**
+ * ready to read
+ *
+ * @return if readable returns true
+ */
+bool is_readable(void);
 
 /**
  * writing one character to serial port
