@@ -1,11 +1,11 @@
 # SPDX-License-Identifier: MIT
 
-cmake_minimum_required(VERSION 3.26.0 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.26.0 FATAL_ERROR) # TODO ExternalProject
 
-set(TEST_SERVER_NAME test-server)
-set(TEST_SERVER_NAME ${TEST_SERVER_NAME} PARENT_SCOPE)
+set(LIBCXX_BUILD "/Users/itaeyeon/Tools/llvm-project/build")
 
-set(LIBCXX_BUILD /Users/itaeyeon/llvm-project/build)
+set(TEST_CONSOLE_NAME test-console)
+set(TEST_CONSOLE_NAME ${TEST_CONSOLE_NAME} PARENT_SCOPE)
 
 # module enable START
 
@@ -23,6 +23,7 @@ fetchcontent_declare(
         DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 fetchcontent_getproperties(std)
+
 if (NOT std_POPULATED)
     fetchcontent_populate(std)
     add_subdirectory(${std_SOURCE_DIR} ${std_BINARY_DIR} EXCLUDE_FROM_ALL)
@@ -30,52 +31,50 @@ endif ()
 
 # module enable END
 
-message(STATUS " Include ${TEST_SERVER_NAME} ")
+message(STATUS "Include test/console")
 
 set(TEST_SERVER_SRC
-        src/argument.cppm
-        src/tab.cppm
+        common/argument.cpp
 
-        src/process/qemu.cppm
-        src/process/process.cppm
-
-        src/connect/tty.cppm
-        src/connect/call.cppm
-        src/connect/protocol.cppm
+        unit/format.cpp
+        unit/qemu.cpp
+        unit/process.cpp
+        unit/tty.cpp
+        unit/call.cpp
+        unit/protocol.cpp
 )
 
-add_executable(${TEST_SERVER_NAME})
-target_link_options(${TEST_SERVER_NAME} PRIVATE -fuse-ld=lld)
-target_include_directories(${TEST_SERVER_NAME} PRIVATE
-        ${CMAKE_SOURCE_DIR}/share
+add_executable(${TEST_CONSOLE_NAME})
+target_link_options(${TEST_CONSOLE_NAME} PRIVATE -fuse-ld=lld)
+target_include_directories(${TEST_CONSOLE_NAME} PRIVATE
+        ${CMAKE_SOURCE_DIR}/test/unit/include
 )
 target_sources(
-        ${TEST_SERVER_NAME}
+        ${TEST_CONSOLE_NAME}
         PRIVATE
         main.cpp
 
         PRIVATE FILE_SET CXX_MODULES
-        BASE_DIRS
+        BASE_DIRS .
         FILES
         ${TEST_SERVER_SRC}
 )
 
-target_compile_options(${TEST_SERVER_NAME} PRIVATE
+target_compile_options(${TEST_CONSOLE_NAME} PRIVATE
         -W -Wall -Werror -Wpedantic
         $<$<CONFIG:Debug>:-Wno-error=unused-parameter>
 
         -fprebuilt-module-path=${CMAKE_BINARY_DIR}/_deps/std-build/CMakeFiles/std.dir/
-        -fprebuilt-module-path=${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/test-server.dir
+        -fprebuilt-module-path=${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${TEST_CONSOLE_NAME}.dir
 
         -nostdinc++
         -isystem ${LIBCXX_BUILD}/modules/c++/v1
 )
-target_link_options(${TEST_SERVER_NAME} PRIVATE
+target_link_options(${TEST_CONSOLE_NAME} PRIVATE
         -nostdlib++
         -L${LIBCXX_BUILD}/lib
         -Wl,-rpath,${LIBCXX_BUILD}/lib
 )
-target_link_libraries(${TEST_SERVER_NAME} PRIVATE
+target_link_libraries(${TEST_CONSOLE_NAME} PRIVATE
         std c++
 )
-
