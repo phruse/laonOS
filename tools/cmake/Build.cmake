@@ -85,7 +85,7 @@ function(build_iso_secure target config)
             "${CMAKE_BINARY_DIR}/image" # create image
             COMMAND ${LAON_XORRISO_DIR} -osirrox on -indev
             "${CMAKE_BINARY_DIR}/${target}.iso"
-            -extract / "${CMAKE_BINARY_DIR}/extract" # extract ISO
+            -extract . "${CMAKE_BINARY_DIR}/extract" # extract ISO
             COMMAND chmod -R +w "${CMAKE_BINARY_DIR}/extract"
             COMMAND cd "${CMAKE_BINARY_DIR}/extract"
             COMMAND find ./* -type f | xargs sha1sum | sed 's/.\\\//\\\//'

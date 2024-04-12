@@ -1,4 +1,9 @@
+#
 # SPDX-License-Identifier: MIT
+#
+
+# For macOS
+
 echo "Installing build tools..."
 
 LOGDIR=$PWD/init_log.txt
