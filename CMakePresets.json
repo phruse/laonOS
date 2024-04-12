@@ -18,9 +18,7 @@
         "CMAKE_C_COMPILER": "clang",
         "CMAKE_CXX_COMPILER": "clang",
         "CMAKE_LINKER": "ld.lld",
-
-        "LAON_LOADER_PLATFORM": "i386",
-        "LAON_KERNEL_PLATFORM": "x86_64"
+        "LAON_PLATFORM": "x86"
       }
     }
   ],

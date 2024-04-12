@@ -5,7 +5,7 @@ cmake_minimum_required(VERSION 3.20)
 set(laonOS_NAME laonOS)
 
 set(CMAKE_ASM_NASM_OBJECT_FORMAT elf) # NASM elf format build
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/tools/cmake")
 
 project(${laonOS_NAME}
         LANGUAGES C CXX ASM_NASM
@@ -17,6 +17,14 @@ message("")
 message(NOTICE "Project ${CMAKE_PROJECT_NAME}")
 message(NOTICE "Build Version ${CMAKE_PROJECT_VERSION}")
 message("")
+
+if (CMAKE_BUILD_TYPE STREQUAL "Release")
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/release)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY  ${CMAKE_SOURCE_DIR}/bin/release)
+else ()
+    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/debug)
+    set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/debug)
+endif ()
 
 include(Setting) # load setting
 include(Tools)
@@ -35,8 +43,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 if (LAON_TEST)
     include(CTest)
     enable_testing()
-
-    add_subdirectory(test/server)
+    add_subdirectory(tools/console)
 endif ()
 
 # reset
@@ -45,12 +52,6 @@ set(CMAKE_C_FLAGS_DEBUG "")
 set(CMAKE_C_FLAGS_MINSIZEREL "")
 set(CMAKE_C_FLAGS_RELWITHDEBINFO "")
 set(CMAKE_C_FLAGS_RELEASE "")
-
-if (CMAKE_BUILD_TYPE STREQUAL "Release")
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/release)
-else ()
-    set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/bin/debug)
-endif ()
 
 # default LINK setting
 set(CMAKE_C_LINK_EXECUTABLE
@@ -116,7 +117,7 @@ add_link_options(
 set(TEMP_OUTPUT ${CMAKE_BINARY_DIR}/image/boot)
 
 if (LAON_TEST)
-    add_subdirectory(test/client)
+    add_subdirectory(test/unit)
 endif ()
 
 message("")
