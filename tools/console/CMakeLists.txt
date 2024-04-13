@@ -1,8 +1,6 @@
 # SPDX-License-Identifier: MIT
 
-cmake_minimum_required(VERSION 3.26.0 FATAL_ERROR) # TODO ExternalProject
-
-set(LIBCXX_BUILD "/Users/itaeyeon/Tools/llvm-project/build")
+cmake_minimum_required(VERSION 3.26.0 FATAL_ERROR)
 
 set(TEST_CONSOLE_NAME test-console)
 set(TEST_CONSOLE_NAME ${TEST_CONSOLE_NAME} PARENT_SCOPE)
@@ -19,7 +17,7 @@ set(CMAKE_EXPERIMENTAL_CXX_MODULE_DYNDEP ON)
 include(FetchContent)
 fetchcontent_declare(
         std
-        URL "file://${LIBCXX_BUILD}/modules/c++/v1/"
+        URL "file://${LAON_LIBCXX_BUILD}/modules/c++/v1/"
         DOWNLOAD_EXTRACT_TIMESTAMP TRUE
 )
 fetchcontent_getproperties(std)
@@ -45,6 +43,7 @@ set(TEST_SERVER_SRC
 )
 
 add_executable(${TEST_CONSOLE_NAME})
+add_dependencies(${TEST_CONSOLE_NAME} llvm-project)
 target_link_options(${TEST_CONSOLE_NAME} PRIVATE -fuse-ld=lld)
 target_include_directories(${TEST_CONSOLE_NAME} PRIVATE
         ${CMAKE_SOURCE_DIR}/test/unit/include
@@ -68,12 +67,12 @@ target_compile_options(${TEST_CONSOLE_NAME} PRIVATE
         -fprebuilt-module-path=${CMAKE_CURRENT_BINARY_DIR}/CMakeFiles/${TEST_CONSOLE_NAME}.dir
 
         -nostdinc++
-        -isystem ${LIBCXX_BUILD}/modules/c++/v1
+        -isystem ${LAON_LIBCXX_BUILD}/modules/c++/v1
 )
 target_link_options(${TEST_CONSOLE_NAME} PRIVATE
         -nostdlib++
-        -L${LIBCXX_BUILD}/lib
-        -Wl,-rpath,${LIBCXX_BUILD}/lib
+        -L${LAON_LIBCXX_BUILD}/lib
+        -Wl,-rpath,${LAON_LIBCXX_BUILD}/lib
 )
 target_link_libraries(${TEST_CONSOLE_NAME} PRIVATE
         std c++

@@ -70,8 +70,20 @@ macro(find_build_tools)
         endif ()
     endif ()
 
-    if (NOT DEFINED LAON_CONSOLE)
-        set(LAON_CONSOLE "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/test-console")
+    if (NOT DEFINED LAON_LIBCXX_BUILD)
+        include(ExternalProject)
+        ExternalProject_Add(llvm-project
+                GIT_REPOSITORY https://github.com/llvm/llvm-project.git
+                GIT_TAG llvmorg-18.1.3
+                SOURCE_SUBDIR runtimes
+                INSTALL_COMMAND ""
+                CMAKE_ARGS
+                -DLIBCXX_ENABLE_STD_MODULES=ON
+                -DLLVM_ENABLE_RUNTIMES=libcxx$<SEMICOLON>libcxxabi$<SEMICOLON>libunwind
+        )
+        ExternalProject_Get_property(llvm-project BINARY_DIR)
+
+        set(LAON_LIBCXX_BUILD ${BINARY_DIR})
     endif ()
 
     # tool check

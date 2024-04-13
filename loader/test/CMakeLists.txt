@@ -20,5 +20,5 @@ add_dependencies(${TEST_NAME} ${LOADER_TEST_NAME}) # loader
 
 # test
 add_test(NAME "${LOADER_NAME} test"
-        COMMAND ${LAON_CONSOLE} unit ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/${TEST_NAME}.iso
+        COMMAND ${TEST_CONSOLE_NAME} unit ${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}/${TEST_NAME}.iso
 )
