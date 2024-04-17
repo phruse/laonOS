@@ -1,4 +1,4 @@
-# laonOS
+# laonOS - in progress
 [![License: MIT](https://shields.io/badge/License-MIT-green?style=flat-square)](https://opensource.org/licenses/MIT)
 [![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/phruse/laonOS/release-build.yml?style=flat-square)](https://github.com/phruse/laonOS/releases)
 
