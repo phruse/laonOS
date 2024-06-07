@@ -9,7 +9,9 @@
 /PuTTY
 
 /bin
+/extern
 /venv
+/externs
 
 # test code
 /backup

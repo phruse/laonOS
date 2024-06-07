@@ -15,17 +15,13 @@ endif ()
 set(CMAKE_EXPERIMENTAL_CXX_MODULE_DYNDEP ON)
 
 include(FetchContent)
-fetchcontent_declare(
+FetchContent_Declare(
         std
         URL "file://${LAON_LIBCXX_BUILD}/modules/c++/v1/"
         DOWNLOAD_EXTRACT_TIMESTAMP TRUE
+        SYSTEM
 )
-fetchcontent_getproperties(std)
-
-if (NOT std_POPULATED)
-    fetchcontent_populate(std)
-    add_subdirectory(${std_SOURCE_DIR} ${std_BINARY_DIR} EXCLUDE_FROM_ALL)
-endif ()
+FetchContent_MakeAvailable(std)
 
 # module enable END
 
@@ -43,7 +39,7 @@ set(TEST_SERVER_SRC
 )
 
 add_executable(${TEST_CONSOLE_NAME})
-add_dependencies(${TEST_CONSOLE_NAME} llvm-project)
+add_dependencies(${TEST_CONSOLE_NAME} std.compat)
 target_link_options(${TEST_CONSOLE_NAME} PRIVATE -fuse-ld=lld)
 target_include_directories(${TEST_CONSOLE_NAME} PRIVATE
         ${CMAKE_SOURCE_DIR}/test/unit/include
@@ -75,5 +71,6 @@ target_link_options(${TEST_CONSOLE_NAME} PRIVATE
         -Wl,-rpath,${LAON_LIBCXX_BUILD}/lib
 )
 target_link_libraries(${TEST_CONSOLE_NAME} PRIVATE
-        std c++
+        std
+        std.compat
 )

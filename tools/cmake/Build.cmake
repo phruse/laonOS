@@ -59,7 +59,7 @@ function(build_iso_dir target config output_dir)
             COMMAND ${CMAKE_COMMAND} -E remove_directory
             "${CMAKE_BINARY_DIR}/image/boot/grub" # clean old folder
             COMMAND ${CMAKE_COMMAND} -E copy
-            "${CMAKE_SOURCE_DIR}/${config}"
+            "${config}"
             "${CMAKE_BINARY_DIR}/image/boot/grub/grub.cfg" # copy grub setting
             COMMAND ${LAON_GRUB_DIR} -o
             "${output_dir}/${target}.iso"

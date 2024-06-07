@@ -20,11 +20,11 @@ target_compile_options(${KERNEL_NAME} PUBLIC
         -D${LAON_KERNEL_PLATFORM}  # platform define
 )
 target_link_options(${KERNEL_NAME} PUBLIC
+        "SHELL:-z max-page-size=0x200000" # 2MB boundary TODO page permission
         -N                                          # writable text section
         -m elf_${LAON_KERNEL_PLATFORM}              # 64bit build
         -e main                                     # entry point
         -lclang_rt.builtins-${LAON_KERNEL_PLATFORM} # compiler-rt
-        "SHELL:-z common-page-size=0x200000"        # 2MB boundary TODO page permission
 )
 add_custom_command(TARGET ${KERNEL_NAME} # remove unused section TODO
         POST_BUILD
@@ -40,7 +40,7 @@ if (LAON_KERNEL_BUILD_MODE MATCHES PIC)
     target_link_options(${KERNEL_NAME} PUBLIC -pie)
 elseif (LAON_KERNEL_BUILD_MODE MATCHES RELOCATE)
     target_compile_options(${KERNEL_NAME} PUBLIC -mcmodel=large -fno-pic)
-    target_link_options(${KERNEL_NAME} PUBLIC -shared)
+    target_link_options(${KERNEL_NAME} PUBLIC "SHELL:-z notext" -shared)
 else ()
     # TODO
 endif ()

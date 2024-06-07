@@ -27,22 +27,22 @@ _Noreturn void test_start(void);
  * @param GROUP case group name
  */
 #define TEST_FILE(GROUP)                                                       \
-  const char __file_name[] = __FILE__;                                         \
-  char __group_name[] = #GROUP
+  static const char __file_name[] = __FILE__;                                  \
+  static char __group_name[] = #GROUP
 
 /**
  * basic test macro template.
  */
 #define TEST_BASIC(NAME, OPTION)                                               \
-  void NAME(void);                                                             \
+  void NAME##_test(void);                                                      \
   const char NAME##_name[] = #NAME;                                            \
   __attribute__((section("test_list")))                                        \
-  const test_case_t NAME##_info = {.call = &NAME,                              \
+  const test_case_t NAME##_info = {.call = &NAME##_test,                       \
                                    .name = NAME##_name,                        \
                                    .group = __group_name,                      \
                                    .file_name = __file_name,                   \
                                    OPTION};                                    \
-  void NAME(void)
+  void NAME##_test(void)
 
 /**
  * test case macro.

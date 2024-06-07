@@ -2,15 +2,14 @@
 
 module;
 
-#include <errno.h>
-#include <signal.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <cerrno>
+#include <csignal>
+#include <cstdio>
 #include <unistd.h>
 
 export module test.process.process;
 
-import std;
+import std.compat;
 
 export class process_error : public std::exception {
 public:

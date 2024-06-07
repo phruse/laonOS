@@ -14,7 +14,7 @@ However, unlike an eBPF, this OS's nearly systems are run in the JIT compiler ab
 In particular, the JIT compiler can transparently offload code to other connected devices using mesh networking. This feature is useful in the embedded cases.
 If an application needs performance, it can interact directly with the device. Otherwise, it can be built once, run anywhere, and offloaded.
 
-If you are interested in this OS, you can read more in [this documentation](docs.laon.io).
+If you are interested in this OS, you can read more in [this documentation](https://docs.laon.io).
 
 ## 👀 Quick Start
 This tutorial provides how to build the laonOS. When you finish this tutorial, you can boot the laonOS.
@@ -37,7 +37,7 @@ cmake --workflow --preset release
 
 If you want to build OS without Docker, `/tools/scripts/init_{platform}.sh` can help you! You may need to adjust some options. I recommend to read `cmake/Tools.cmake`.
 ### Run in QEMU
-The laonOS had been tested in real machine, but we'll use QEMU for convenience. The loader uses multiboot2, so you can easily install real machine. If you hate virtual machine, try it!
+The laonOS had been tested in real machine, but we'll use QEMU for convenience. The boot uses multiboot2, so you can easily install real machine. If you hate virtual machine, try it!
 
 Now run this script. If you use low memory system, you should change `-m 6G` option.
 ```shell

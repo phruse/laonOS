@@ -6,9 +6,19 @@ import test.argument;
 
 import test.process.qemu;
 
-constexpr auto os_path = "bin/debug/laonOS-loader-test.iso";
+constexpr auto os_path = "bin/debug/laonOS-boot-test.iso";
 
 int main(int argc, char *argv[]) {
+  std::set_terminate([]() {
+    try {
+      std::rethrow_exception(std::current_exception());
+    } catch (const std::exception &err) {
+      std::cerr << err.what() << std::endl;
+    }
+
+    std::abort();
+  });
+
   auto arg = argument{argc, argv};
 
   arg.add_command({"-h", "--help"}, [](auto &) {
@@ -112,7 +122,7 @@ int main(int argc, char *argv[]) {
     qemu_wrapper qemu_wrapper{option};
     qemu_wrapper.run();
 
-    tty connection{qemu_wrapper.get_device()};
+    tty connection{qemu_wrapper};
     test_runner<tab> runner{connection};
 
     auto builder = runner.build();
@@ -142,7 +152,7 @@ int main(int argc, char *argv[]) {
 
   try {
     return arg.run();
-  } catch (std::exception &err) {
+  } catch (const std::exception &err) {
     std::cerr << err.what() << std::endl;
     return -1;
   }
