@@ -28,7 +28,7 @@ start:
   // interrupt blocking
   cli
 
-  mov os_stack, %esp
+  mov $os_stack, %esp
   // set base pointer register (legacy)
   mov %esp, %ebp
 
