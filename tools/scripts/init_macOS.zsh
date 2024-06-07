@@ -15,7 +15,7 @@ if [[ $? != 0 ]] ; then
     > "$LOGDIR" 2>&1
 fi
 brew install \
-cmake nasm llvm autoconf automake x86_64-elf-gcc qemu ninja coreutils \
+cmake llvm autoconf automake x86_64-elf-gcc qemu ninja coreutils \
 > "$LOGDIR" 2>&1
 
 TEMPDIR=$(mktemp -d 2>/dev/null || mktemp -d -t 'laon_os_init_temp')

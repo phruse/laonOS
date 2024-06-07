@@ -10,7 +10,7 @@ LOGDIR=$PWD/init_log.txt
 
 apt update >"$LOGDIR" 2>&1
 apt install -y \
-  qemu nasm python3-pip llvm clang lld xorriso grub2-common mtools ninja-build \
+  qemu python3-pip llvm clang lld xorriso grub2-common mtools ninja-build \
   git >"$LOGDIR" 2>&1
 pip install cmake >"$LOGDIR" 2>&1
 

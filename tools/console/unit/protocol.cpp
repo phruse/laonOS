@@ -58,7 +58,7 @@ private:
   bool isolation = false;
 
   static auto underscore_to_space(const std::string_view &input) {
-    return std::regex_replace(input.data(), std::regex("_"), " ");
+    return std::regex_replace(input.data(), std::regex("-"), " ");
   }
 };
 

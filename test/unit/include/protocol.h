@@ -40,16 +40,18 @@ typedef enum {
   CALL_EXIT = 'e'
 } call_code_e;
 
-static const char *const assert_code_map[] = {"assert not-true",
+static const char *const assert_code_map[] = {"assert true", "assert false",
                                               "assert not memory same"};
 typedef enum {
-  ASSERT_NOT_TRUE = TEST_ASSERT_ENTRY + 1,
-  ASSERT_NOT_MEMORY_SAME = TEST_ASSERT_ENTRY + 2,
+  ASSERT_TRUE = TEST_ASSERT_ENTRY + 1,
+  ASSERT_FALSE = TEST_ASSERT_ENTRY + 2,
+  ASSERT_NOT_MEMORY_SAME = TEST_ASSERT_ENTRY + 3,
 } assert_code_e;
 
-static const char *const expect_code_map[] = {"expect not-true"};
+static const char *const expect_code_map[] = {"expect true", "expect false"};
 typedef enum {
-  EXPECT_NOT_TRUE = TEST_EXPECT_ENTRY + 1,
+  EXPECT_TRUE = TEST_EXPECT_ENTRY + 1,
+  EXPECT_FALSE = TEST_EXPECT_ENTRY + 2,
 } expect_code_e;
 
 #endif // LAONOS_TEST_UNIT_INCLUDE_PROTOCOL_H

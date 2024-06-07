@@ -38,7 +38,8 @@ void expect_response(expect_code_e code, unsigned line);
 /**
  * case must be ture.
  */
-#define ASSERT_TRUE(CASE) ASSERT(CASE, ASSERT_NOT_TRUE)
+#define ASSERT_TRUE(CASE) ASSERT(CASE, ASSERT_TRUE)
+#define ASSERT_FALSE(CASE) ASSERT(!(CASE), ASSERT_FALSE)
 
 /**
  * basic expect
@@ -51,6 +52,7 @@ void expect_response(expect_code_e code, unsigned line);
 /**
  * case should be ture.
  */
-#define EXPECT_TRUE(CASE) EXPECT(CASE, EXPECT_NOT_TRUE)
+#define EXPECT_TRUE(CASE) EXPECT(CASE, EXPECT_TRUE)
+#define EXPECT_FALSE(CASE) EXPECT(!(CASE), EXPECT_FALSE)
 
 #endif // LAONOS_TEST_UNIT_INCLUDE_CHECK_H

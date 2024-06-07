@@ -3,7 +3,6 @@
 #include "call.h"
 
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #define READ_SIZE 512

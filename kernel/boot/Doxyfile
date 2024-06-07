@@ -1,0 +1,18 @@
+PROJECT_NAME           = "laonOS-boot"
+PROJECT_NUMBER         = 1.0
+
+OUTPUT_DIRECTORY       = ./doxygen
+INPUT                  = ./
+
+FILE_PATTERNS          = *.c *.h
+EXTENSION_MAPPING      = c=C
+
+LANGUAGE               = English
+RECURSIVE              = YES
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = YES
+EXTRACT_STATIC         = YES
+EXTRACT_LOCAL_CLASSES  = YES
+
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html

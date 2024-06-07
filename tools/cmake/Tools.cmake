@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: MIT
 
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.26.0 FATAL_ERROR)
 
 include_guard(DIRECTORY)
 
@@ -71,19 +71,41 @@ macro(find_build_tools)
     endif ()
 
     if (NOT DEFINED LAON_LIBCXX_BUILD)
+        set(LLVM_BUILD_DIR ${CMAKE_SOURCE_DIR}/externs/llvm-project)
+        file(MAKE_DIRECTORY ${LLVM_BUILD_DIR} ${LLVM_BUILD_DIR}/build)
+
+        set(LLVM_BUILD_LIST_CONTENT "
+        cmake_minimum_required(VERSION 3.20)
+        project(llvm)
+
         include(ExternalProject)
         ExternalProject_Add(llvm-project
                 GIT_REPOSITORY https://github.com/llvm/llvm-project.git
                 GIT_TAG llvmorg-18.1.3
                 SOURCE_SUBDIR runtimes
-                INSTALL_COMMAND ""
+                PREFIX \"\"
+                INSTALL_COMMAND \"\"
                 CMAKE_ARGS
                 -DLIBCXX_ENABLE_STD_MODULES=ON
+                -DCMAKE_CXX_STANDARD=23
                 -DLLVM_ENABLE_RUNTIMES=libcxx$<SEMICOLON>libcxxabi$<SEMICOLON>libunwind
         )
-        ExternalProject_Get_property(llvm-project BINARY_DIR)
 
-        set(LAON_LIBCXX_BUILD ${BINARY_DIR})
+        add_custom_target(trigger_llvm)
+        add_dependencies(trigger_llvm llvm-project)
+        ")
+
+        file(WRITE ${LLVM_BUILD_DIR}/CMakeLists.txt "${LLVM_BUILD_LIST_CONTENT}")
+
+        execute_process(COMMAND ${CMAKE_COMMAND} .. -G ${CMAKE_GENERATOR}
+                WORKING_DIRECTORY ${LLVM_BUILD_DIR}/build
+        )
+        execute_process(COMMAND ${CMAKE_COMMAND} --build .
+                WORKING_DIRECTORY ${LLVM_BUILD_DIR}/build
+        )
+
+        set(LAON_LIBCXX_BUILD
+                "${LLVM_BUILD_DIR}/build/llvm-project-prefix/src/llvm-project-build")
     endif ()
 
     # tool check
